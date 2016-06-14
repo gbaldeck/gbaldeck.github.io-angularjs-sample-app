@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{vm.selectedPizza.name}}</h3>
+    <h4>{{vm.selectedPizza.description}}</h4>
+</div>
+<div class="modal-body">
+    <div class="pizza-page-flex" style="width:100% !important">
+        <uib-pagination total-items="vm.selectedPizza.toppings.length"
+                        ng-model="vm.detailsPageNumber"
+                        ng-change="vm.paginateDetails()"
+                        items-per-page="vm.itemsPerPage"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        max-size="3"
+                        force-ellipses="true">
+        </uib-pagination>
+    </div>
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Toppings</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="topping in vm.paginatedDetails track by $index">
+            <td>
+                <div class="pizza-td">
+                    {{topping.name}}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="vm.closeModal()">Close</button>
+</div>

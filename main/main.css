@@ -1,0 +1,49 @@
+.pizza-list-height{
+    min-height: 200px
+}
+
+.pizza-list-item{
+    min-height: 20px;
+    border: 1px solid black;
+}
+
+.pizza-tab-border{
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd
+}
+
+.bottom-bar{
+    padding-bottom: 20px;
+}
+
+table{
+    border: 1px solid #ddd;
+}
+
+.pizza-td{
+    min-height: 20px !important;
+}
+
+.form-space{
+    margin-top: 10px;
+}
+
+.pizza-flex{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.pizza-flex-left{
+    margin-right: auto;
+}
+
+.pizza-page-flex{
+    display: flex;
+    justify-content: center;
+}
+
+.modal-body, .modal-header, .modal-footer {
+    word-wrap: break-word;
+}

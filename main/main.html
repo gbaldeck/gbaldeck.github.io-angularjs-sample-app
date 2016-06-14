@@ -1,0 +1,196 @@
+<div class="container-fluid" ng-controller="MainController as vm">
+    <div class="row" style="margin-top:10px">
+        <div class="col-xs-4 col-xs-offset-4">
+            <div class="row">
+                <div class="col-xs-12">
+                    <uib-tabset active="activeJustified" justified="true">
+                        <uib-tab index="0" heading="Pizzas">
+                            <div class="col-xs-12 pizza-tab-border">
+                                <div class="col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-12 pizza-page-flex"
+                                             ng-show="vm.paginatedPizzas && vm.paginatedToppings">
+                                            <uib-pagination total-items="vm.PizzaService.pizzas.length"
+                                                            ng-model="vm.pizzaPageNumber"
+                                                            ng-change="vm.paginatePizzas()"
+                                                            items-per-page="vm.itemsPerPage"
+                                                            class="pagination-sm"
+                                                            boundary-links="true"
+                                                            max-size="3"
+                                                            force-ellipses="true">
+                                            </uib-pagination>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 pizza-list-height">
+                                    <div class="panel panel-default"
+                                         ng-show="vm.paginatedPizzas && vm.paginatedToppings">
+                                        <div class="panel-heading pizza-flex">
+                                            <div class="pizza-flex-left">
+                                                <strong>Selected Pizza:</strong> {{vm.selectedPizza.name}}
+                                            </div>
+                                            <button type="button"
+                                                    class="btn btn-primary btn-md"
+                                                    ladda="vm.showingDetails"
+                                                    data-style="expand-left"
+                                                    ng-click="vm.showDetails()"
+                                                    ng-disabled="!vm.selectedPizza || vm.selectedPizza === vm.emptyPizza">
+                                                Pizza Details
+                                            </button>
+                                        </div>
+                                        <table class="table table-hover table-condensed">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="pizza-td"
+                                                ng-repeat="pizza in vm.paginatedPizzas track by $index">
+                                                <td ng-click="vm.selectedPizza = pizza"
+                                                    ng-class="{'active': vm.selectedPizza === pizza}">
+                                                    <div class="pizza-td">
+                                                    {{pizza.name}}
+                                                        </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div ng-hide="vm.paginatedPizzas && vm.paginatedToppings"
+                                         us-spinner="{radius:30, width:8, length: 16}"></div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="row bottom-bar">
+                                        <div class="col-xs-12">
+                                            <input type="text" class="form-control" ng-model="vm.pizzaName"
+                                                   placeholder="Name">
+                                        </div>
+                                        <div class="col-xs-12 form-space">
+                                            <input type="text" class="form-control" ng-model="vm.pizzaDesc"
+                                                   placeholder="Description">
+                                        </div>
+                                        <div class="col-xs-12 form-space">
+                                            <button type="button" ng-click="vm.createPizza()"
+                                                    ladda="vm.addingPizza"
+                                                    data-style="expand-right"
+                                                    class="btn btn-primary btn-md">
+                                                Add New Pizza
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div ng-show="vm.errors['pizzaName']"
+                                         class="col-x-12 alert alert-danger">
+                                        <a href="#" class="close"
+                                           ng-click="vm.errors['pizzaName'] = null">&times;</a>
+                                        {{vm.errors['pizzaName']}}
+                                    </div>
+                                    <div ng-show="vm.errors['pizzaDesc']"
+                                         class="col-x-12 alert alert-danger">
+                                        <a href="#" class="close"
+                                           ng-click="vm.errors['pizzaDesc'] = null">&times;</a>
+                                        {{vm.errors['pizzaDesc']}}
+                                    </div>
+                                    <div ng-show="vm.pizzaSaved"
+                                         class="col-xs-12 alert alert-success">
+                                        <a href="#" class="close"
+                                           ng-click="vm.pizzaSaved = false">&times;</a>
+                                        <strong>Success!</strong> The pizza was added.
+                                    </div>
+                                </div>
+                            </div>
+                        </uib-tab>
+                        <uib-tab index="1" heading="Toppings">
+                            <div class="col-xs-12 pizza-tab-border">
+                                <div class="col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-12 pizza-page-flex"
+                                             ng-show="vm.paginatedPizzas && vm.paginatedToppings">
+                                            <uib-pagination total-items="vm.ToppingService.toppings.length"
+                                                            ng-model="vm.toppingsPageNumber"
+                                                            ng-change="vm.paginateToppings()"
+                                                            items-per-page="vm.itemsPerPage"
+                                                            class="pagination-sm"
+                                                            boundary-links="true"
+                                                            max-size="3"
+                                                            force-ellipses="true">
+                                            </uib-pagination>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 pizza-list-height">
+                                    <div class="panel panel-default"
+                                         ng-show="vm.paginatedPizzas && vm.paginatedToppings">
+                                        <div class="panel-heading pizza-flex">
+                                            <div class="pizza-flex-left">
+                                                <strong>Selected Pizza:</strong> {{vm.selectedPizza.name}}<br>
+                                                <strong>Selected Topping:</strong> {{vm.selectedTopping.name}}
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-md"
+                                                    ladda="vm.addingTopping"
+                                                    data-style="expand-left"
+                                                    ng-click="vm.addPizzaTopping()"
+                                                    ng-disabled="!vm.selectedPizza || vm.selectedPizza === vm.emptyPizza ||
+                                                                 !vm.selectedTopping || vm.selectedTopping == vm.emptyTopping">
+                                                Add to Pizza
+                                            </button>
+                                        </div>
+                                        <table class="table table-hover table-condensed"
+                                               ng-show="vm.paginatedPizzas && vm.paginatedToppings">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="topping in vm.paginatedToppings track by $index">
+                                                <td ng-click="vm.selectedTopping = topping"
+                                                    ng-class="{'active': vm.selectedTopping === topping}">
+                                                    <div class="pizza-td">
+                                                    {{topping.name}}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div ng-hide="vm.paginatedPizzas && vm.paginatedToppings"
+                                         us-spinner="{radius:30, width:8, length: 16}"></div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="bottom-bar row">
+                                        <div class="col-xs-12">
+                                            <input type="text" class="form-control" placeholder="Name"
+                                                   ng-model="vm.newTopping">
+                                            </div>
+                                            <div class="col-xs-12 form-space">
+                                                <button type="button"
+                                                        ladda="vm.addingNewTopping"
+                                                        data-style="expand-right"
+                                                        ng-click="vm.createTopping()"
+                                                        class="btn btn-primary">
+                                                    Add New Topping
+                                            </button>
+                                            </div>
+                                    </div>
+                                    <div ng-show="vm.errors['toppingName']"
+                                         class="col-x-12 alert alert-danger">
+                                        <a href="#" class="close"
+                                           ng-click="vm.errors['toppingName'] = null">&times;</a>
+                                        {{vm.errors['toppingName']}}
+                                    </div>
+                                    <div ng-show="vm.toppingSaved"
+                                         class="col-xs-12 alert alert-success">
+                                        <a href="#" class="close"
+                                           ng-click="vm.toppingSaved = false">&times;</a>
+                                        <strong>Success!</strong> The topping was added.
+                                    </div>
+                                </div>
+                            </div>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
